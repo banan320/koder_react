@@ -10,24 +10,16 @@ import { useState } from "react";
 
 // !============
 function App() {
-  const [value1, setValue1] = useState("0");
+  const [value, setValue] = useState("1");
 
-  function handleChange1(event) {
-    setValue1(event.currentTarget.value);
+  function handleChange(event) {
+    setValue(event.target.value);
   }
-
-  function blur(num) {
-    let str = num;
-    let arr = str.split("");
-    let sum = arr.reduce((a, b) => Number(a) + Number(b));
-    return sum;
-  }
-
   return (
     <div className="App">
-      <input placeholder={value1} onChange={handleChange1} onBlur={blur} />
-
-      <p>result: {blur(value1)}</p>
+      <input onChange={handleChange} defaultValue={value} />
+      урок 25
+      <p>text: {value}</p>
     </div>
   );
 }
