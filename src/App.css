@@ -2,7 +2,7 @@ body {
   background-color: #282c34;
   height: 100%;
   color: white;
-  font-size: 25px;
+  font-size: 20px;
 }
 .App {
 }
@@ -16,4 +16,10 @@ button {
 .App img {
   width: 100%;
   max-width: 100px;
+}
+
+table,
+td {
+  border: 1px solid #fff;
+  padding: 2vh;
 }
