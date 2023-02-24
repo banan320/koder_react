@@ -173,7 +173,6 @@ function App() {
   const [value3, setValue3] = useState("");
 
   // initNotes =======
-
   const result = notes.map((item) => (
     <p key={item.id}>
       <span>{item.prop1}</span>
