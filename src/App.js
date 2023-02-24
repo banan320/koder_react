@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 //
 //
 //
-//
 // const initNotes = [
 //   {
 //     id: uuidv4(),
@@ -156,49 +155,31 @@ const initProds = [
 function getInitObj() {
   return {
     id: uuidv4(),
-    prop1: "",
-    prop2: "",
-    prop3: "",
+    name: "",
+    catg: "",
+    cost: "",
   };
 }
 
 // !============
 function App() {
-  const [notes, setNotes] = useState(initNotes);
-  // const [prods, setProds] = useState(initProds);
+  const [notes, setNotes] = useState(initProds);
   const [obj, setObj] = useState(getInitObj());
 
-  const [value1, setValue1] = useState("");
-  const [value2, setValue2] = useState("");
-  const [value3, setValue3] = useState("");
-
-  // initNotes =======
   const result = notes.map((item) => (
-    <p key={item.id}>
-      <span>{item.prop1}</span>
-      <span>{item.prop2}</span>
-      <span>{item.prop3}</span>
-      <button onClick={() => remItem(item.id)}>remove</button>
-    </p>
+    <tr key={item.id}>
+      <td>{item.name}</td>
+      <td>{item.catg}</td>
+      <td>{item.cost}</td>
+      <td>
+        <button onClick={() => remove(item.id)}>remove</button>
+      </td>
+    </tr>
   ));
 
-  function remItem(id) {
+  function remove(id) {
     setNotes(notes.filter((note) => note.id !== id));
   }
-
-  // function addItem() {
-  //   let obj = {
-  //     id: uuidv4(),
-  //     prop1: value1,
-  //     prop2: value2,
-  //     prop3: value3,
-  //   };
-
-  //   setNotes([...notes, obj]);
-  //   setValue1("");
-  //   setValue2("");
-  //   setValue3("");
-  // }
 
   function changeProp(prop, event) {
     setObj({ ...obj, [prop]: event.target.value });
@@ -211,23 +192,24 @@ function App() {
 
   return (
     <div className="App">
-      {result}
+      <table>
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>Category</td>
+            <td>Cost</td>
+            <td>Remove</td>
+          </tr>
+        </thead>
+        <tbody>{result}</tbody>
+      </table>
       <br />
-      <input
-        value={obj.prop1}
-        onChange={(event) => changeProp("prop1", event)}
-      />
-      <input
-        value={obj.prop2}
-        onChange={(event) => changeProp("prop2", event)}
-      />
-      <input
-        type="number"
-        value={obj.prop3}
-        onChange={(event) => changeProp("prop3", event)}
-      />
 
-      <button onClick={addItem}>save</button>
+      <input value={obj.name} onChange={(event) => changeProp("name", event)} />
+      <input value={obj.catg} onChange={(event) => changeProp("catg", event)} />
+      <input value={obj.cost} onChange={(event) => changeProp("cost", event)} />
+
+      <button onClick={addItem}>add</button>
     </div>
   );
 }
