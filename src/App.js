@@ -7,124 +7,6 @@ import { v4 as uuidv4 } from "uuid";
 //
 //
 //
-// const initNotes = [
-//   {
-//     id: uuidv4(),
-//     prop1: "value11",
-//     prop2: "value12",
-//     prop3: "value13",
-//   },
-//   {
-//     id: uuidv4(),
-//     prop1: "value21",
-//     prop2: "value22",
-//     prop3: "value23",
-//   },
-//   {
-//     id: uuidv4(),
-//     prop1: "value31",
-//     prop2: "value32",
-//     prop3: "value33",
-//   },
-// ];
-// const initProds = [
-//   { id: uuidv4(), name: "prod1", catg: "catg1", cost: 100 },
-//   { id: uuidv4(), name: "prod2", catg: "catg2", cost: 200 },
-//   { id: uuidv4(), name: "prod3", catg: "catg3", cost: 300 },
-// ];
-// // !============
-// function App() {
-//   const [notes, setNotes] = useState(initNotes);
-//   const [prods, setProds] = useState(initProds);
-
-//   const [value1, setValue1] = useState("");
-//   const [value2, setValue2] = useState("");
-//   const [value3, setValue3] = useState("");
-
-//   // initProds ==========
-//   const rows = prods.map((item) => (
-//     <tr key={item.id}>
-//       <td>{item.name}</td>
-//       <td>{item.catg}</td>
-//       <td>{item.cost}</td>
-//       <td>
-//         <button onClick={() => remItem(item.id)}>remove</button>
-//       </td>
-//     </tr>
-//   ));
-
-//   // initNotes =======
-
-//   // const result = notes.map((item) => (
-//   //   <p key={item.id}>
-//   //     <span>{item.prop1}</span>
-//   //     <span>{item.prop2}</span>
-//   //     <span>{item.prop3}</span>
-//   //     <button onClick={() => remItem(item.id)}>remove</button>
-//   //   </p>
-//   // ));
-
-//   function remItem(id) {
-//     setNotes(notes.filter((note) => note.id !== id));
-//     setProds(prods.filter((prod) => prod.id !== id));
-//   }
-
-//   function addItem() {
-//     // let obj = {
-//     //   id: uuidv4(),
-//     //   prop1: value1,
-//     //   prop2: value2,
-//     //   prop3: value3,
-//     // };
-//     let data = {
-//       id: uuidv4(),
-//       name: value1,
-//       catg: value2,
-//       cost: value3,
-//     };
-//     // setNotes([...notes, obj]);
-//     setProds([...prods, data]);
-//     setValue1("");
-//     setValue2("");
-//     setValue3("");
-//   }
-
-//   return (
-//     <div className="App">
-//       <table>
-//         <thead>
-//           <tr>
-//             <td>Name</td>
-//             <td>Category</td>
-//             <td>Cost</td>
-//             <td>Remove</td>
-//           </tr>
-//         </thead>
-//         <tbody>{rows}</tbody>
-//       </table>
-//       <br />
-//       {/* {result} */}
-//       <br />
-//       <input
-//         value={value1}
-//         onChange={(event) => setValue1(event.target.value)}
-//       />
-//       <input
-//         value={value2}
-//         onChange={(event) => setValue2(event.target.value)}
-//       />
-//       <input
-//         type="number"
-//         value={value3}
-//         onChange={(event) => setValue3(event.target.value)}
-//       />
-
-//       <button onClick={addItem}>save</button>
-//     </div>
-//   );
-// }
-// export default App;
-
 //! ===========================================
 const initNotes = [
   {
@@ -152,19 +34,19 @@ const initProds = [
   { id: uuidv4(), name: "prod3", catg: "catg3", cost: 300 },
 ];
 
-function getInitObj() {
-  return {
-    id: uuidv4(),
-    name: "",
-    catg: "",
-    cost: "",
-  };
-}
+// function getInitObj() {
+//   return {
+//     id: uuidv4(),
+//     name: "",
+//     catg: "",
+//     cost: "",
+//   };
+// }
 
 // !============
 function App() {
   const [notes, setNotes] = useState(initProds);
-  const [obj, setObj] = useState(getInitObj());
+  const [editId, setEditId] = useState(null);
 
   const result = notes.map((item) => (
     <tr key={item.id}>
@@ -172,22 +54,33 @@ function App() {
       <td>{item.catg}</td>
       <td>{item.cost}</td>
       <td>
-        <button onClick={() => remove(item.id)}>remove</button>
+        <button onClick={() => setEditId(item.id)}>edit</button>
       </td>
     </tr>
   ));
 
-  function remove(id) {
-    setNotes(notes.filter((note) => note.id !== id));
+  // const result = notes.map((item) => (
+  //   <p key={item.id}>
+  //     <span>{item.prop1}</span>
+  //     <span>{item.prop2}</span>
+  //     <span>{item.prop3}</span>
+  //     <button onClick={() => setEditId(item.id)}>edit</button>
+  //   </p>
+  // ));
+
+  function getValue(prop) {
+    return notes.reduce(
+      (res, note) => (note.id === editId ? note[prop] : res),
+      ""
+    );
   }
 
-  function changeProp(prop, event) {
-    setObj({ ...obj, [prop]: event.target.value });
-  }
-
-  function addItem() {
-    setNotes([...notes, obj]);
-    setObj(getInitObj());
+  function changeItem(prop, event) {
+    setNotes(
+      notes.map((note) =>
+        note.id === editId ? { ...note, [prop]: event.target.value } : note
+      )
+    );
   }
 
   return (
@@ -198,19 +91,42 @@ function App() {
             <td>Name</td>
             <td>Category</td>
             <td>Cost</td>
-            <td>Remove</td>
+            <td>Edit</td>
           </tr>
         </thead>
         <tbody>{result}</tbody>
       </table>
-      <br />
-
-      <input value={obj.name} onChange={(event) => changeProp("name", event)} />
-      <input value={obj.catg} onChange={(event) => changeProp("catg", event)} />
-      <input value={obj.cost} onChange={(event) => changeProp("cost", event)} />
-
-      <button onClick={addItem}>add</button>
+      <input
+        value={getValue("name")}
+        onChange={(event) => changeItem("name", event)}
+      />
+      <input
+        value={getValue("catg")}
+        onChange={(event) => changeItem("catg", event)}
+      />
+      <input
+        value={getValue("cost")}
+        onChange={(event) => changeItem("cost", event)}
+      />
+      <button onClick={() => setEditId(null)}>save</button>
     </div>
+
+    // <div className="App">
+    //   {result}
+    //   <input
+    //     value={getValue("prop1")}
+    //     onChange={(event) => changeItem("prop1", event)}
+    //   />
+    //   <input
+    //     value={getValue("prop2")}
+    //     onChange={(event) => changeItem("prop2", event)}
+    //   />
+    //   <input
+    //     value={getValue("prop3")}
+    //     onChange={(event) => changeItem("prop3", event)}
+    //   />
+    //   <button onClick={() => setEditId(null)}>save</button>
+    // </div>
   );
 }
 export default App;
