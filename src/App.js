@@ -46,121 +46,69 @@ import { v4 as uuidv4 } from "uuid";
 const initNotes = [
   {
     id: uuidv4(),
-    name: "name1",
-    desc: "long description 1",
-    show: false,
+    fields: [
+      { name: "prop1", value: "value11", isEdit: false },
+      { name: "prop2", value: "value12", isEdit: false },
+      { name: "prop3", value: "value13", isEdit: false },
+    ],
   },
   {
     id: uuidv4(),
-    name: "name2",
-    desc: "long description 2",
-    show: false,
+    fields: [
+      { name: "prop1", value: "value21", isEdit: false },
+      { name: "prop2", value: "value22", isEdit: false },
+      { name: "prop3", value: "value23", isEdit: false },
+    ],
   },
   {
     id: uuidv4(),
-    name: "name3",
-    desc: "long description 3",
-    show: false,
-  },
-];
-
-const initProds = [
-  {
-    id: uuidv4(),
-    name: "prod1",
-    cost: "cost1",
-    desc: "long description 1",
-    comm: "my super comment 1",
-    show: false,
-  },
-  {
-    id: uuidv4(),
-    name: "prod2",
-    cost: "cost2",
-    desc: "long description 2",
-    comm: "my super comment 2",
-    show: false,
-  },
-  {
-    id: uuidv4(),
-    name: "prod3",
-    cost: "cost3",
-    desc: "long description 3",
-    comm: "my super comment 3",
-    show: false,
+    fields: [
+      { name: "prop1", value: "value31", isEdit: false },
+      { name: "prop2", value: "value32", isEdit: false },
+      { name: "prop3", value: "value33", isEdit: false },
+    ],
   },
 ];
 
 // !============
 function App() {
-  // const [notes, setNotes] = useState(initProds);
-  // const [notes, setNotes] = useState(initNotes);
-  // const [obj, setObj] = useState(getInitObj());
-  // const [editId, setEditId] = useState(null);
+  const [notes, setNotes] = useState(initNotes);
 
-  // const result = notes.map((item) => (
-  //   <tr key={item.id}>
-  //     <td>{item.name}</td>
-  //     <td>{item.catg}</td>
-  //     <td>{item.cost}</td>
-  //     <td>
-  //       <button onClick={() => setEditId(item.id)}>edit</button>
-  //     </td>
-  //   </tr>
-  // ));
+  const rows = notes.map((note) => {
+    const cells = note.fields.map((field) => {
+      let elem;
+      if (!field.isEdit) {
+        elem = (
+          <span onClick={() => startEdit(note.id, field.name)}>
+            {field.value}
+          </span>
+        );
+      } else {
+        elem = (
+          <input
+            value={field.value}
+            onChange={(event) => changeCell(note.id, field.name, event)}
+            onBlur={() => endEdit(note.id, field.name)}
+          ></input>
+        );
+      }
+      return <td key={field.name}>{elem}</td>;
+    });
+    return <tr key={note.id}>{cells}</tr>;
+  });
 
-  // const result = notes.map((note) => (
-  //   <p key={note.id}>
-  //     <span>{note.prop1}</span>,<span>{note.prop2}</span>,
-  //     <span>{note.prop3}</span>
-  //     <button onClick={() => setEditId(note.id)}>edit</button>
-  //   </p>
-  // ));
-  // function getValue(prop) {
-  //   return notes.reduce(
-  //     (res, note) => (note.id === editId ? note[prop] : res),
-  //     ""
-  //   );
-  // }
-  // function getValue(prop) {
-  //   if (editId) {
-  //     return notes.reduce(
-  //       (res, note) => (note.id === editId ? note[prop] : res),
-  //       ""
-  //     );
-  //   } else {
-  //     return obj[prop];
-  //   }
-  // }
-
-  // function changeItem(prop, event) {
-  //   if (editId) {
-  //     setNotes(
-  //       notes.map((note) =>
-  //         note.id === editId ? { ...note, [prop]: event.target.value } : note
-  //       )
-  //     );
-  //   } else {
-  //     setObj({ ...obj, [prop]: event.target.value });
-  //   }
-  // }
-
-  // function saveItem() {
-  //   if (editId) {
-  //     setEditId(null);
-  //   } else {
-  //     setNotes([...notes, obj]);
-  //     setObj(getInitObj());
-  //   }
-  // }
-
-  const [notes, setNotes] = useState(initProds);
-
-  function showDesc(id) {
+  function startEdit(id, name) {
     setNotes(
       notes.map((note) => {
         if (note.id === id) {
-          return { ...note, show: !note.show };
+          const fields = note.fields.map((field) => {
+            if (field.name === name) {
+              return { ...field, isEdit: true };
+            } else {
+              return field;
+            }
+          });
+          return { id, fields };
         } else {
           return note;
         }
@@ -168,74 +116,51 @@ function App() {
     );
   }
 
-  const result = notes.map((note) => {
-    let desc;
-    if (note.show) {
-      desc = <i>{note.desc}</i>;
-    }
+  function endEdit(id, name) {
+    setNotes(
+      notes.map((note) => {
+        if (note.id === id) {
+          const fields = note.fields.map((field) => {
+            if (field.name === name) {
+              return { ...field, isEdit: false };
+            } else {
+              return field;
+            }
+          });
 
-    let comm;
-    if (note.show) {
-      comm = <i>{note.comm}</i>;
-    }
-
-    return (
-      <li key={note.id}>
-        {note.name}
-        <button onClick={() => showDesc(note.id)}>
-          {note.show ? "hide" : "show"}
-        </button>
-
-        {desc}
-        {comm}
-      </li>
+          return { id, fields };
+        } else {
+          return note;
+        }
+      })
     );
-  });
+  }
+
+  function changeCell(id, name, event) {
+    setNotes(
+      notes.map((note) => {
+        if (note.id === id) {
+          const fields = note.fields.map((field) => {
+            if (field.name === name) {
+              return { ...field, value: event.target.value };
+            } else {
+              return field;
+            }
+          });
+
+          return { id, fields };
+        } else {
+          return note;
+        }
+      })
+    );
+  }
 
   return (
     <div className="App">
-      <ul>{result}</ul>
-
-      {/* <table>
-        <thead>
-          <tr>
-            <td>Name</td>
-            <td>Category</td>
-            <td>Cost</td>
-            <td>Edit</td>
-          </tr>
-        </thead>
-        <tbody>{result}</tbody>
+      <table>
+        <tbody>{rows}</tbody>
       </table>
-      <input
-        value={getValue("name")}
-        onChange={(event) => changeItem("name", event)}
-      />
-      <input
-        value={getValue("catg")}
-        onChange={(event) => changeItem("catg", event)}
-      />
-      <input
-        value={getValue("cost")}
-        onChange={(event) => changeItem("cost", event)}
-      />
-      <button onClick={() => setEditId(null)}>save</button> */}
-      {/* <br />
-      {result}
-      <input
-        value={getValue("prop1")}
-        onChange={(event) => changeItem("prop1", event)}
-      />
-      <input
-        value={getValue("prop2")}
-        onChange={(event) => changeItem("prop2", event)}
-      />
-      <input
-        value={getValue("prop3")}
-        onChange={(event) => changeItem("prop3", event)}
-      />
-
-      <button onClick={saveItem}>save</button> */}
     </div>
   );
 }
