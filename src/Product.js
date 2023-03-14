@@ -5,6 +5,7 @@ const Product = ({
   id,
   name,
   cost,
+  catg,
   inCart,
   addToCart,
   isEdit,
@@ -29,8 +30,7 @@ const Product = ({
     //   <button onClick={() => addToCart(id)}>to cart</button>
     //   <button onClick={() => toggleMode(id)}>{isEdit ? "save" : "edit"}</button>
     // </div>
-    <div>
-      name:{" "}
+    <tr>
       <ProductField
         id={id}
         text={name}
@@ -39,7 +39,6 @@ const Product = ({
         isEdit={isEdit}
         editProd={editProd}
       />
-      cost:{" "}
       <ProductField
         id={id}
         text={cost}
@@ -48,10 +47,24 @@ const Product = ({
         isEdit={isEdit}
         editProd={editProd}
       />
-      <span>{inCart ? "in cart" : "not in cart"}</span>
-      <button onClick={() => addToCart(id)}>to cart</button>
-      <button onClick={() => toggleMode(id)}>{isEdit ? "save" : "edit"}</button>
-    </div>
+      <ProductField
+        id={id}
+        text={catg}
+        type={"catg"}
+        inCart={inCart}
+        isEdit={isEdit}
+        editProd={editProd}
+      />
+      <td>
+        <span>{inCart ? "in cart" : "not in cart"}</span>
+        <button onClick={() => addToCart(id)}>to cart</button>
+      </td>
+      <td>
+        <button onClick={() => toggleMode(id)}>
+          {isEdit ? "save" : "edit"}
+        </button>
+      </td>
+    </tr>
   );
 };
 

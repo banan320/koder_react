@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
-const UserField = ({ id, text, type, isEdits, editChange }) => {
+const UserField = ({ id, text, type, editChange }) => {
+  const [isEdits, setIsEdits] = useState(false);
   return (
     <>
       {isEdits ? (
-        <input value={text} onChange={(e) => editChange(id, type, e)} />
+        <input
+          value={text}
+          onChange={(e) => editChange(id, type, e)}
+          autoFocus
+          onBlur={() => setIsEdits(false)}
+        />
       ) : (
-        <span>{text}</span>
+        <span onClick={() => setIsEdits(true)}>{text}</span>
       )}
     </>
   );
