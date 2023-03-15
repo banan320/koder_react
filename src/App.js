@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import Products from "./Products";
 import Users from "./Users";
 import Employee from "./Employee";
+import Calculator from "./Calculator";
 
 // import { nanoid } from "nanoid";
 //
@@ -90,6 +91,7 @@ function App() {
         salary="50.000"
       /> */}
       <Users />
+      <Calculator />
     </div>
   );
 }
