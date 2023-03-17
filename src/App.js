@@ -5,6 +5,7 @@ import Products from "./Products";
 import Users from "./Users";
 import Employee from "./Employee";
 import Calculator from "./Calculator";
+import Checklist from "./checkList/Checklist";
 
 // import { nanoid } from "nanoid";
 //
@@ -71,7 +72,8 @@ function App() {
 
   return (
     <div className="App">
-      <Products />
+      <Checklist />
+      {/* <Products /> */}
       {/* <Employee
         lastName="Alex"
         firstName="Ger"
@@ -90,8 +92,8 @@ function App() {
         middleName="And"
         salary="50.000"
       /> */}
-      <Users />
-      <Calculator />
+      {/* <Users />
+      <Calculator /> */}
     </div>
   );
 }
