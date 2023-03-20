@@ -42,12 +42,12 @@ const Checklist = () => {
           <input
             value={note.task}
             onChange={(e) => changeItem(note.id, "task", e)}
-            onBlur={() => endEdit(note.id)}
+            onBlur={() => editTask(note.id)}
             autoFocus
           />
         ) : (
           <span
-            onDoubleClick={() => startEdit(note.id)}
+            onDoubleClick={() => editTask(note.id)}
             className={note.isDone ? "done" : ""}
           >
             {note.task}
@@ -60,26 +60,13 @@ const Checklist = () => {
     </tr>
   ));
 
-  function startEdit(id) {
+  function editTask(id) {
     setNotes(
       notes.map((note) => {
         if (note.id === id) {
-          return { ...note, isEdit: true };
-        } else {
-          return note;
+          note.isEdit = !note.isEdit;
         }
-      })
-    );
-  }
-
-  function endEdit(id) {
-    setNotes(
-      notes.map((note) => {
-        if (note.id === id) {
-          return { ...note, isEdit: false };
-        } else {
-          return note;
-        }
+        return note;
       })
     );
   }
@@ -90,7 +77,6 @@ const Checklist = () => {
         if (note.id === id) {
           note[field] = e.target.value;
         }
-
         return note;
       })
     );
