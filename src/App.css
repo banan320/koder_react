@@ -1,6 +1,6 @@
 body {
   background-color: #282c34;
-  height: 100%;
+  width: 100%;
   color: white;
   font-size: 20px;
 }
@@ -45,4 +45,30 @@ td span.done {
 td > span {
   border: 1px solid #fff;
   padding: 3px 10px 10px 10px;
+}
+
+textarea {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.notes {
+  display: flex;
+}
+.notes li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 35vh;
+  border: 1px solid #f1d28f;
+  padding: 5px;
+  position: relative;
+}
+
+button.removeNote {
+  position: absolute;
+  right: 0;
+  top: 0;
 }

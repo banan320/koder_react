@@ -6,6 +6,7 @@ import Users from "./Users";
 import Employee from "./Employee";
 import Calculator from "./Calculator";
 import Checklist from "./checkList/Checklist";
+import Notebook from "./notebook/Notebook";
 
 // import { nanoid } from "nanoid";
 //
@@ -17,27 +18,24 @@ import Checklist from "./checkList/Checklist";
 const initNotes = [
   {
     id: uuidv4(),
-    fields: [
-      { name: "prop1", value: "value11", isEdit: false },
-      { name: "prop2", value: "value12", isEdit: false },
-      { name: "prop3", value: "value13", isEdit: false },
-    ],
+
+    prop1: "value11",
+    prop2: "value12",
+    prop3: "value13",
   },
   {
     id: uuidv4(),
-    fields: [
-      { name: "prop1", value: "value21", isEdit: false },
-      { name: "prop2", value: "value22", isEdit: false },
-      { name: "prop3", value: "value23", isEdit: false },
-    ],
+
+    prop1: "value21",
+    prop2: "value22",
+    prop3: "value23",
   },
   {
     id: uuidv4(),
-    fields: [
-      { name: "prop1", value: "value31", isEdit: false },
-      { name: "prop2", value: "value32", isEdit: false },
-      { name: "prop3", value: "value33", isEdit: false },
-    ],
+
+    prop1: "value31",
+    prop2: "value32",
+    prop3: "value33",
   },
 ];
 
@@ -72,7 +70,8 @@ function App() {
 
   return (
     <div className="App">
-      <Checklist />
+      {/* <Checklist /> */}
+      <Notebook />
       {/* <Products /> */}
       {/* <Employee
         lastName="Alex"
