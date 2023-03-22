@@ -1,41 +1,77 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-const initNotes = [
-  {
-    id: uuidv4(),
-    task: "product1",
-    isEdit: false,
-    isDone: false,
-  },
-  {
-    id: uuidv4(),
-    task: "product2",
-    isEdit: false,
-    isDone: false,
-  },
-  {
-    id: uuidv4(),
-    task: "product3",
-    isEdit: false,
-    isDone: false,
-  },
-];
-
-function getInitObj() {
-  return {
-    id: uuidv4(),
-    task: "",
-    isEdit: false,
-    isDone: false,
-  };
-}
-
 const Checklist = () => {
-  const [notes, setNotes] = useState(initNotes);
-  const [obj, setObj] = useState(getInitObj());
+  // const [notes, setNotes] = useState(initNotes);
+  const [notes, setNotes] = useState("");
+  // const [obj, setObj] = useState(getInitObj());
 
-  const result = notes.map((note) => (
+  // получение данных из localStorage
+  const [localItem, setLocalItem] = useState(
+    JSON.parse(localStorage.getItem("elems")) || []
+  );
+
+  //после обновления элементов в notes, запускается запись данных в localStorage
+  useEffect(() => {
+    localStorage.setItem("elems", JSON.stringify(localItem));
+  }, [localItem]);
+
+  const newItem = () => {
+    if (notes.trim() !== "") {
+      const newElem = {
+        id: uuidv4(),
+        task: notes,
+        isEdit: false,
+        isDone: false,
+      };
+      setLocalItem((localItem) => [...localItem, newElem]);
+      setNotes("");
+    }
+  };
+
+  function editTask(id) {
+    setLocalItem(
+      localItem.map((note) => {
+        if (note.id === id) {
+          note.isEdit = !note.isEdit;
+        }
+        return note;
+      })
+    );
+  }
+
+  function changeItem(id, field, e) {
+    setLocalItem(
+      localItem.map((note) => {
+        if (note.id === id) {
+          note[field] = e.target.value;
+        }
+        return note;
+      })
+    );
+  }
+
+  function doneTask(id) {
+    setLocalItem(
+      localItem.map((note) => {
+        if (note.id === id) {
+          note.isDone = !note.isDone;
+        }
+        return note;
+      })
+    );
+  }
+
+  function removeTask(id) {
+    setLocalItem(localItem.filter((note) => note.id !== id));
+  }
+
+  function keyPress(el) {
+    const code = el.keyCode || el.which;
+    if (code === 13) newItem();
+  }
+
+  const result = localItem.map((note) => (
     <tr key={note.id}>
       <td>
         {note.isEdit ? (
@@ -55,69 +91,34 @@ const Checklist = () => {
         )}
 
         <button onClick={() => removeTask(note.id)}>х</button>
-        <button onClick={() => doneTask(note.id)}>✔</button>
+        <button onClick={() => doneTask(note.id)}>
+          {note.isEdit ? "ok" : "✔"}
+        </button>
       </td>
     </tr>
   ));
-
-  function editTask(id) {
-    setNotes(
-      notes.map((note) => {
-        if (note.id === id) {
-          note.isEdit = !note.isEdit;
-        }
-        return note;
-      })
-    );
-  }
-
-  function changeItem(id, field, e) {
-    setNotes(
-      notes.map((note) => {
-        if (note.id === id) {
-          note[field] = e.target.value;
-        }
-        return note;
-      })
-    );
-  }
-
-  function doneTask(id) {
-    setNotes(
-      notes.map((note) => {
-        if (note.id === id) {
-          note.isDone = !note.isDone;
-        }
-        return note;
-      })
-    );
-  }
-
-  function removeTask(id) {
-    setNotes(notes.filter((note) => note.id !== id));
-  }
-
-  function changeProp(prop, e) {
-    setObj({ ...obj, [prop]: e.target.value });
-  }
-
-  function addNote() {
-    setNotes([...notes, obj]);
-    setObj(getInitObj());
-  }
 
   return (
     <div>
       <table>
         <thead>
           <tr>
-            <td>Задачи</td>
+            <td>
+              {localItem == [] || localItem == ""
+                ? "Добавьте задачу"
+                : "Задачи"}
+            </td>
           </tr>
         </thead>
         <tbody>{result}</tbody>
       </table>
-      <input value={obj.task} onChange={(e) => changeProp("task", e)} />
-      <button onClick={addNote}>add task</button>
+      <input
+        placeholder="Добавить задачу..."
+        value={notes}
+        onKeyDown={(el) => keyPress(el)}
+        onChange={(e) => setNotes(e.target.value)}
+      />
+      <button onClick={newItem}>add task</button>
     </div>
   );
 };
