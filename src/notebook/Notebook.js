@@ -33,8 +33,6 @@ const filterNotes = (searchText, listOfNotes) => {
 };
 
 const Notebook = () => {
-  //   const [notes, setNotes] = useState(initNotes);
-  //   const [obj, setObj] = useState(getInitObj());
   const [notes, setNotes] = useState(initNotes);
   const [obj, setObj] = useState(getInitObj());
   const [editId, setEditId] = useState(null);
@@ -43,20 +41,11 @@ const Notebook = () => {
 
   useEffect(() => {
     const Debounce = setTimeout(() => {
-      const filteredCars = filterNotes(searchTerm, initNotes);
-      setNotes(filteredCars);
-    }, 300);
-
+      const filteredNotes = filterNotes(searchTerm, initNotes);
+      setNotes(filteredNotes);
+    }, 500);
     return () => clearTimeout(Debounce);
   }, [searchTerm]);
-
-  //   function addNote() {
-  //     setNotes([...notes, obj]);
-  //     setObj(getInitObj());
-  //   }
-  //   function changeProp(prop, event) {
-  //     setObj({ ...obj, [prop]: event.target.value });
-  //   }
 
   function getValue(prop) {
     if (editId) {
@@ -106,13 +95,17 @@ const Notebook = () => {
   return (
     <div className="notes">
       <div>
-        <input
-          type="text"
-          autoComplete="off"
-          placeholder="Поиск заметки"
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <ul>{result}</ul>
+        <div>
+          <input
+            type="text"
+            autoComplete="off"
+            placeholder="Поиск заметки"
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div className="notes__list">
+          <ul>{result}</ul>
+        </div>
       </div>
       <div>
         <textarea

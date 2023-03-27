@@ -57,7 +57,10 @@ textarea {
 .notes {
   display: flex;
 }
-.notes li {
+.notes__list ul {
+  padding: 0;
+}
+.notes__list li {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
